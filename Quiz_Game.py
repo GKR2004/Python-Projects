@@ -1,66 +1,40 @@
-import json
-
-def add_expense(expenses, description, amount):
-    expenses.append({"description": description, "amount": amount})
-    print(f"Added expense: {description}, Amount: {amount}")
-
-def get_total_expenses(expenses):
-    return sum(expense['amount'] for expense in expenses)
-
-def get_balance(budget, expenses):
-    return budget - get_total_expenses(expenses)
-
-def show_budget_details(budget, expenses):
-    print(f"Total Budget: {budget}")
-    print("Expenses:")
-    for expense in expenses:
-        print(f"- {expense['description']}: {expense['amount']}")
-    print(f"Total Spent: {get_total_expenses(expenses)}")
-    print(f"Remaining Budget: {get_balance(budget, expenses)}")
-
-def load_budget_data(filepath):
-    try:
-        with open(filepath, 'r') as file:
-            data = json.load(file)
-            return data['initial_budget'], data['expenses']
-    except (FileNotFoundError, json.JSONDecodeError):
-        return 0, []  # Return default values if the file doesn't exist or is empty/corrupted
-#
-def save_budget_data(filepath, initial_budget, expenses):
-    data = {
-        'initial_budget': initial_budget,
-        'expenses': expenses
-    }
-    with open(filepath, 'w') as file:
-        json.dump(data, file, indent=4)
-
-
-def main():
-    print("Welcome to the Budget App")
-    initial_budget = float(input("Please enter your initial budget: "))
-    # filepath = 'budget_data.json'  # Define the path to your JSON file
-    # initial_budget, expenses = load_budget_data(filepath)
-    budget = initial_budget
-    expenses = []
-
-    while True:
-        print("\nWhat would you like to do?")
-        print("1. Add an expense")
-        print("2. Show budget details")
-        print("3. Exit")
-        choice = input("Enter your choice (1/2/3): ")
-
-        if choice == "1":
-            description = input("Enter expense description: ")
-            amount = float(input("Enter expense amount: "))
-            add_expense(expenses, description, amount)
-        elif choice == "2":
-            show_budget_details(budget, expenses)
-        elif choice == "3":
-            print("Exiting Budget App. Goodbye!")
-            break
+def run_quiz(questions):
+    score = 0
+    for question in questions:
+        print(question["prompt"])
+        for option in question["options"]:
+            print(option)
+        answer = input("Enter your answer (A, B, C, or D): ").upper()
+        if answer == question["answer"]:
+            print("Correct!\n")
+            score += 1
         else:
-            print("Invalid choice, please choose again.")
+            print("Wrong! The correct answer was", question["answer"], "\n")
+    print(f"You got {score} out of {len(questions)} questions correct.")
 
-if __name__ == "__main__":
-    main()
+# List of quiz questions. Each question is a dictionary.
+questions = [
+    {
+        "prompt": "What is the capital of France?",
+        "options": ["A. Paris", "B. London", "C. Berlin", "D. Madrid"],
+        "answer": "A"
+    },
+    {
+        "prompt": "Which language is primarily spoken in Brazil?",
+        "options": ["A. Spanish", "B. Portuguese", "C. English", "D. French"],
+        "answer": "B"
+    },
+    {
+        "prompt": "What is the smallest prime number?",
+        "options": ["A. 1", "B. 2", "C. 3", "D. 5"],
+        "answer": "B"
+    },
+    {
+        "prompt": "Who wrote 'To Kill a Mockingbird'?",
+        "options": ["A. Harper Lee", "B. Mark Twain", "C. J.K. Rowling", "D. Ernest Hemingway"],
+        "answer": "A"
+    }
+]
+
+# Run the quiz
+run_quiz(questions)
